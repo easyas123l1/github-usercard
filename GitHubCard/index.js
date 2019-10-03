@@ -5,8 +5,25 @@
 
 axios.get(`https://api.github.com/users/easyas123l1`)
   .then(results => {
+    console.log(results);
     cards.appendChild(createCard(results.data));
+    return results.data.followers_url
   }) 
+  .then(results2 => {
+    return axios.get(results2)
+  })
+  .then(results3 => {
+    console.log(results3, '3');
+    results3.data.forEach(text => {
+      console.log(text.url);
+      axios.get(text.url)
+      .then(results5 => {
+        console.log(results5, '5');
+        cards.appendChild(createCard(results5.data));
+      })
+    })
+  })
+
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -73,8 +90,6 @@ createCard = (obj => {
   const following = document.createElement('p');
   const bio = document.createElement('p');
 
-
-
   card.classList.add('card');
   cardInfo.classList.add('card-info');
   name.classList.add('name');
@@ -104,13 +119,3 @@ createCard = (obj => {
 
   return card;
 })
-
-
-
-/* List of LS Instructors Github username's: 
-  tetondan
-  dustinmyers
-  justsml
-  luishrd
-  bigknell
-*/
